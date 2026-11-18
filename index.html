@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>guestbook</title>
+
+    <!-- pixel-ish font for the y2k chat room look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet" />
+
+    <!-- Firebase (v8 namespaced SDK): app + realtime database -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+    <link rel="stylesheet" href="style.css" />
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <main id="window">
+      <header id="titleBar">
+        <span>guestbook</span>
+        <span id="status">connecting…</span>
+      </header>
+
+      <!-- who are you? (remembered for as long as this tab is open) -->
+      <!-- two fields side by side: name (left) and color (right) -->
+      <section id="identity">
+        <div class="field grow">
+          <label for="nameInput">name</label>
+          <div id="identityForm">
+            <input id="nameInput" maxlength="30" autocomplete="off" placeholder="your screen name" />
+          </div>
+          <!-- after you enter a name, it shows here instead of the text box -->
+          <div id="identityChip" hidden>
+            <b id="chipName"></b>
+            <button id="changeName" class="link">change</button>
+          </div>
+        </div>
+        <div class="field">
+          <label for="colorPicker">color</label>
+          <!-- the whole box is clickable, so clicking anywhere opens the picker -->
+          <label id="colorButton" title="pick your color">
+            <input type="color" id="colorPicker" />
+            <span>▾</span>
+          </label>
+        </div>
+      </section>
+
+      <!-- write a new note -->
+      <form id="composer" autocomplete="off">
+        <label for="noteInput">note</label>
+        <textarea id="noteInput" maxlength="1000" rows="3" placeholder="say hi ~"></textarea>
+
+        <!-- optional drawing that goes with the note -->
+        <div id="drawPanel" hidden>
+          <canvas id="drawCanvas" width="480" height="200"></canvas>
+          <div class="drawTools">
+            <label class="check">size <input type="range" id="penSize" min="1" max="12" value="3" /></label>
+            <span>
+              <button type="button" class="link" id="clearDrawing">clear</button>
+              <button type="button" class="link" id="removeDrawing">remove</button>
+            </span>
+          </div>
+        </div>
+
+        <!-- hidden from people, bots tend to fill it in -->
+        <input id="website" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" />
+        <div class="row">
+          <span class="options">
+            <button type="button" class="link" id="addDrawing">+ drawing</button>
+            <label class="check"><input type="checkbox" id="privateCheck" /> private (blur it)</label>
+          </span>
+          <button type="submit" id="sendButton">send</button>
+        </div>
+      </form>
+
+      <p class="sectionTitle">notes</p>
+      <div id="threads"></div>
+      <p id="empty" hidden>no notes yet. be the first.</p>
+    </main>
+  </body>
+</html>
